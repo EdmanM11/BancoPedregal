@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "HistorialTransacciones";
+}
+
+<h3 class="text-center font-weight-light my-4" style="font-size:xx-large">Historial de transacciones</h3>
+<div class="container mt-3">
+    <div></div>
+    <p>Se muestra el historial del las transacciones realizadas</p>
+    <table class="table" id="tblcuentash">
+        <thead class="table-success">
+            <tr>
+                <th>Número de cuenta</th>
+                <th>Nombre Propietario</th>
+                <th>Tipo de cuenta</th>
+                <th>Saldo de la cuenta</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @using System.Globalization
+            @using SistemaBancario.Controllers
+            @using (var Code = new SistemaBancario.Controllers.CodigoURLController())
+            {
+
+                foreach (var lista in Model)
+                {
+                    <tr>
+                        <td>@lista.NUMERO_CTA</td>
+                        <td>@lista.NOMBRE @lista.APELLIDO</td>
+                        <td>@lista.TIPO_CUENTA</td>
+                        <td>@lista.SALDO</td>
+                        <td>                         
+                            <a class="btn btn-primary" href="@Url.Content("../Transacciones/Encontrar?"+ Code.Encode32("txtcodigo=" + lista.COD_CUENTA.ToString()))">Historial</a> 
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#tblcuentash').dataTable({
+            "order": [[0, "desc"]],
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+            }
+
+        });
+    });
+
+</script>
+

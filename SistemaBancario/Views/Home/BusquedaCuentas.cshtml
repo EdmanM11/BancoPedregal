@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "BusquedaCuentas";
+}
+
+<h3 class="text-center font-weight-light my-4" style="font-size:xx-large">Cuentas por Cliente</h3>
+<div class="container mt-3">
+    <div></div>
+    <p>Seleccione el cliente para ver sus cuentas disponibles</p>
+    <table class="table" id="tblcuentash">
+        <thead class="table-success">
+            <tr>
+                <th>Identidad</th>
+                <th>Nombre de  Cliente</th>
+                <th class="text-center">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @using System.Globalization
+            @using SistemaBancario.Controllers
+            @using (var Code = new SistemaBancario.Controllers.CodigoURLController())
+            {
+
+                foreach (var lista in Model)
+                {
+                    <tr>
+                        <td>@lista.NUM_IDENTIDAD</td>
+                        <td>@lista.NOMBRE @lista.APELLIDO</td>
+                        <td class="text-center">
+                            <a class="btn btn-primary" href="@Url.Content("../Home/EncontrarCliente?"+ Code.Encode32("txtcliente=" + lista.COD_CLIENTE.ToString()))">Seleccionar</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#tblcuentash').dataTable({
+            "order": [[0, "desc"]],
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+            }
+
+        });
+    });
+
+</script>

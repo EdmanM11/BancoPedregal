@@ -1,0 +1,193 @@
+﻿
+@{
+    ViewBag.Title = "GestionCuentas";
+}
+
+
+<!-- Formulario -->
+<div style="padding-top: 0%; padding-left: 1%; padding-bottom: 2%;">
+    <div class="w-100 text-dark rounded" style="background-color: #c9d2d1">
+        <div class="p-4 m-2">
+            <div class="text-center">
+                <h3 class="h4 text-white-900"><b>Administración del tipo de cuenta</b> </h3>
+                <img src="~/Scripts/img/asd.png" height="70" width="100" />
+            </div>
+            <br>
+
+            @if (TempData["mensaje3"] != null)
+            {
+                if (TempData["mensaje3"].ToString() == "1")
+                {
+                    <script>
+
+
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Nuevo tipo de cuenta insertado'
+                        })
+
+                    </script>
+                }
+            }
+
+            @if (TempData["mensajeCta1"] != null)
+            {
+                if (TempData["mensajeCta1"].ToString() == "1")
+                {
+                    <script>
+                        Swal.fire(
+                            'Cuenta Desactivada',
+                            'Tipo de Cuenta Desactivada',
+                            'warning'
+                        )
+                    </script>
+                }
+            }
+
+            @if (TempData["mensajeCta2"] != null)
+            {
+                if (TempData["mensajeCta2"].ToString() == "1")
+                {
+                    <script>
+                        Swal.fire(
+                            'Cuenta Activada',
+                            'Tipo de Cuenta Activada',
+                            'success'
+                        )
+                    </script>
+                }
+            }
+
+            <br>
+            <br>
+            <form class="row g-3 needs-validation" method="post" action="@Url.Content("../Registro/NuevoTipCuenta")" novalidate>
+
+                <div class="row">
+                    <div class="text-star">
+                        <p class="h5"><b>Registrar Nueva Cuenta</b></p>
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <hr class="sidebar-divider d-none d-md-block"><br>
+
+                <div class="row">
+
+                    <div class="col">
+                        <label for="txtnombres" class="form-label">Nombre del nuevo tipo de cuenta:</label>
+                        <input type="text" class="form-control" id="txttipcuenta" name="txttipcuenta" required>
+                        <div class="valid-feedback">
+                            Valido
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Divider -->
+                <hr class="sidebar-divider d-none d-md-block">
+                <div class="row">
+                    <div class="col col-6 mx-auto text-center">
+                        <div class="">
+                            <button type="submit" class="btn btn-primary">Agregar Cuenta</button> <a></a> <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Ver Tipos de cuentas</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal  de cuentas-->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Tipos de Cuentas del sistema</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!--inicio del formulario-->
+                <table class="table" id="gestionCta">
+                    <thead class="table-success">
+                        <tr>
+                           
+                            <th>Tipo de Cuenta</th>
+                            <th>Estado de Cuenta</th>
+                            <th><center>Acción</center></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var lista in Model)
+                        {
+                        <tr>
+                            
+                            <td>@lista.TIPO_CUENTA</td>
+                            <td>@lista.ESTADO_CUENTA</td>
+                            <td>
+                                <center>
+                                    @if (lista.ESTADO_CUENTA == "ACTIVO")
+                                    {
+                                        <form method="post" action="@Url.Content("../Registro/UpdateEstadoCuentaDes")">
+                                            <button type="submit" id="btnDesactivarCta" name="btnDesactivarCta" class="btn btn-danger" value="@lista.COD_TIP_CUENTA">
+                                                Desactivar
+                                            </button>
+                                            <input type="text" value="@lista.TIPO_CUENTA" name="txttipocta" hidden />  
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form method="post" action="@Url.Content("../Registro/UpdateEstadoCuentaAct")">
+                                            <button type="submit" id="btnActivarCta" name="btnActivarCta" class="btn btn-success" value="@lista.COD_TIP_CUENTA">
+                                                Activar
+                                            </button>
+                                            <input type="text" value="@lista.TIPO_CUENTA" name="txttipocta" hidden />                                         
+                                        </form>
+                                    }
+                                </center>
+                            </td>
+                        </tr>       
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#gestionCta').dataTable({
+            "order": [[0, "desc"]],
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+            }
+
+        });
+    });
+
+</script>
+
+
+
+<script src="~/Scripts/funciones/funciones.js"></script>
+

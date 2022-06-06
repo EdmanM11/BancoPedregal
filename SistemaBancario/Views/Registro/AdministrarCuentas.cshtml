@@ -1,0 +1,149 @@
+﻿
+@{
+    ViewBag.Title = "AdministrarCuentas";
+}
+
+
+<h3 class="text-center font-weight-light my-4" style="font-size:xx-large">Lista de cuentas del sistema</h3>
+@if (TempData["cambio1"] != null)
+{
+    if (TempData["cambio1"].ToString() == "1")
+    {
+        <script>
+
+
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+
+            Toast.fire({
+                icon: 'warning',
+                title: 'Cuenta Desactivada'
+            })
+
+        </script>
+
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">
+            Error
+        </div>
+    }
+}
+
+@if (TempData["cambio"] != null)
+{
+    if (TempData["cambio"].ToString() == "1")
+    {
+        <script>
+
+
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+
+            Toast.fire({
+                icon: 'success',
+                title: 'Cuenta Activada'
+            })
+
+        </script>
+
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">
+            Error
+        </div>
+    }
+}
+
+
+<div class="card-body">
+    <table class="table table-striped" id="listarCuentas">
+        <thead class="table-success">
+            <tr>
+                <th>Numero de cuenta</th>
+                <th>Nombre</th>
+                <th>Tipo de cuenta</th>
+                <th>Estado</th>
+                <th><center>Acciones</center></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var lista in Model)
+            {
+                <tr>
+                    <td>@lista.NUMERO_CTA</td>
+                    <td>@lista.NOMBRE @lista.APELLIDO </td>
+                    <td>@lista.TIPO_CUENTA</td>
+                    <td>@lista.ESTADO</td>
+                    <td>
+                        <center>
+                            @if (lista.ESTADO == "ACTIVO")
+                            {
+                                <form method="post" action="@Url.Content("../Registro/UpdateEstadoCuentaI")">
+                                    <button type="submit" id="btnDesactivar" name="btnDesactivar" class="btn btn-danger">
+                                        Desactivar
+                                    </button>
+                                    <input type="text" value=" @lista.COD_CUENTA" name="txtcodcuenta" hidden />
+                                    <input type="text" value=" @lista.COD_CLIENTE" name="txtcodCliente" hidden />
+                                    <input type="text" value=" @lista.COD_TIP_CUENTA" name="txtcodtipo" hidden />
+                                    <input type="text" value=" @lista.SALDO" name="txtsaldo" hidden />
+                                    <input type="text" value=" @lista.NUMERO_CTA" name="txtnumerocta" hidden />
+                                </form>
+                            }
+                            else
+                            {
+                                <form method="post" action="@Url.Content("../Registro/UpdateEstadoCuentaA")">
+                                    <button type="submit" id="btnActivar" name="btnActivar" class="btn btn-success">
+                                        Activar
+                                    </button>
+                                    <input type="text" value=" @lista.COD_CUENTA" name="txtcodcuenta" hidden />
+                                    <input type="text" value=" @lista.COD_CLIENTE" name="txtcodCliente" hidden />
+                                    <input type="text" value=" @lista.COD_TIP_CUENTA" name="txtcodtipo" hidden />
+                                    <input type="text" value=" @lista.SALDO" name="txtsaldo" hidden />
+                                    <input type="text" value=" @lista.NUMERO_CTA" name="txtnumerocta" hidden />
+
+                                </form>
+
+                            }
+                        </center>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#listarCuentas').dataTable({
+            "order": [[0, "desc"]],
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+            }
+
+        });
+    });
+
+</script>

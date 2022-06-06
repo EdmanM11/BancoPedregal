@@ -1,0 +1,77 @@
+﻿
+@{
+    ViewBag.Title = "HistorialSeleccionado";
+}
+
+@foreach (var lst in ViewBag.valor2)
+{
+    <input id="txtcodigo" value="@lst.COD_CUENTA" readonly hidden/>
+    <h4 class="text-center font-weight-light my-4" style="font-size:xx-large">Historial de Transacciones</h4>
+    <h5 class="text-center">Cuenta a nombre de: @lst.NOMBRE @lst.APELLIDO</h5>
+    <h6 class="text-center">Tipo de cuenta: @lst.TIPO_CUENTA</h6>
+    <h6 class="text-center">Número de Cuenta: @lst.NUMERO_CTA</h6>
+    <h6 class="text-center">Saldo Disponible: L. @lst.SALDO</h6>
+}
+
+<div class="card-body">
+    <table class="table table-striped" id="historialtabla">
+        <thead class="table-success">
+            <tr>
+                <th>.</th>
+                <th>Fecha y  Hora</th>
+                <th>Monto</th>
+                <th>Usuario que realizó</th>
+                <th>Tipo de transacción</th>
+                <th>Movimiento</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var lista in ViewBag.valor)
+            {
+                <tr>
+                    @if (lista.TIPO_TRANSACCION == "DEPOSITO")
+                    {
+                        <td><img src="~/Scripts/img/iconorealizado.png" width="30" height="30"></td>
+                    }
+                    else
+                    {
+                        <td><img src="~/Scripts/img/iconodep1.png" width="30" height="30"></td>
+                    }
+
+                    <td>@lista.FECHA</td>
+                    <td>@lista.MONTO</td>
+                    <td>@lista.USUARIO_TRA</td>
+                    <td>@lista.TIPO_TRANSACCION</td>
+                    <td>@lista.MOVIMIENTO</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<a id="verhistorial" onclick="verHistorial()" class="btn btn-primary">Ver Historial</a>
+<button class="btn btn-primary" onclick="location.href='@Url.Action("HistorialTransacciones", "Transacciones")'">Regresar</button>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#historialtabla').dataTable({
+            "order": [[0, "desc"]],
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+            }
+
+        });
+    });
+
+</script>
+
+<script type="text/javascript">
+    function verHistorial() {
+       var codigocuenta = document.getElementById("txtcodigo").value;
+        document.getElementById("verhistorial").href = "https://localhost:44344/Reportes/ReporteHistorial.aspx?codcuenta=" + codigocuenta;
+    }
+
+</script>

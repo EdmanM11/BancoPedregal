@@ -1,0 +1,301 @@
+﻿
+@{
+    ViewBag.Title = "ListaUsuarios";
+}
+
+<h3 class="text-center font-weight-light my-4" style="font-size:xx-large">Lista de Usuarios del sistema</h3>
+
+@if (TempData["content"] != null)
+{
+    if (TempData["content"].ToString() == "1")
+    {
+        <script>
+
+
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+
+            Toast.fire({
+                icon: 'success',
+                title: 'Cambio de estado exitoso'
+            })
+
+        </script>
+
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">
+            Error
+        </div>
+    }
+
+}
+
+@if (TempData["msg"] != null)
+{
+    if (TempData["msg"].ToString() == "1")
+    {
+        <script>
+
+
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+
+            Toast.fire({
+                icon: 'success',
+                title: 'Cambio de contraseña exitoso'
+            })
+
+        </script>
+
+    }
+    else if (TempData["msg"].ToString() == "2")
+    {
+        <div class="alert alert-danger" role="alert">
+            No se pueden dejar los campos de contraseña vacios
+        </div>
+    }
+
+}
+
+
+@if (TempData["Error"] != null)
+{
+    if (TempData["Error"].ToString() == "1")
+    {
+        <script>
+            Swal.fire(
+                'Error',
+                'Las contraseñas deben coincidir',
+                'error'
+            )
+        </script>
+
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">
+
+        </div>
+    }
+
+}
+
+
+
+<div class="card-body">
+    <table class="table table-striped" id="listaUser">
+        <thead class="table-success">
+            <tr>
+                <th>Usuario</th>
+                <th>Nombre</th>
+                <th>Rol</th>
+                <th>Estado</th>
+                <th class="text-center">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var lst in Model)
+            {
+                <tr>
+                    <td>@lst.USUARIO</td>
+                    <td>@lst.NOMBRES @lst.APELLIDOS</td>
+                    <td>@lst.ROL</td>
+                    <td>@lst.ESTADO_USER</td>
+                    <td class="text-center"><a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="extraerdatos('@lst.ESTADO_USER','@lst.USUARIO','@lst.ROL', '@lst.COD_USUARIO')">Seleccionar</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Administración de usuario: <input id="usuariojava" class="sinbordefondo" readonly /> <input id="roljava" class="sinbordefondo" readonly /></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!--inicio del formulario-->
+                <!-- Formulario -->
+                <div style="padding-top: 0%; padding-left: 1%; padding-bottom: 2%;">
+                    <div class="w-100 text-dark rounded" style="background-color: #c9d2d1">
+                        <div class="p-4 m-2">
+                            <div class="text-center">
+
+                            </div>
+                            <br>
+
+
+                            <form class="row g-3 needs-validation" method="post" action="@Url.Action("../Registro/CambioPass")" novalidate>
+
+                                <div class="row">
+                                    <div class="text-star">
+                                        <p class="h5"><b>Cambio de Contraseña</b> <i class="fas fa-money-bill"></i></p>
+                                    </div>
+                                </div>
+
+                                <!-- Divider -->
+                                <hr class="sidebar-divider d-none d-md-block"><br>
+
+                                <div class="row">
+
+                                    <div class="col">
+                                        <label for="txtnewpass" class="form-label">Nueva Contraseña</label>
+                                        <input type="password" class="form-control" name="txtnewpass" id="txtnewpass" required>
+                                        <div class="valid-feedback">
+                                            Valido
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <label for="txtconfirmpass" class="form-label">Confirmar Contraseña</label>
+                                        <input type="password" class="form-control" name="txtconfirmpass" id="txtconfirmpass" pattern="(?=^.{8,12}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" required>
+                                        <input name="txtcoduser2" id="txtcoduser2" readonly hidden required />
+                                        <div class="valid-feedback">
+                                            Valido
+                                        </div>
+                                    </div>
+
+                                    <div class="col">
+                                        <label for="txtNuevoMonto" class="form-label">-</label>
+                                        <button type="submit" class="btn btn-success form-control">Cambiar Contraseña</button>
+                                    </div>
+                                </div>
+                            </form>
+
+
+                            <form class="row g-3 needs-validation" action="@Url.Action("../Registro/EstadoUser")" method="post" novalidate>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+
+                                <div class="row">
+                                    <div class="text-star">
+                                        <p class="h5"><b>Cambiar Estado</b> <i class="fas fa-money-bill"></i></p>
+                                    </div>
+                                </div>
+
+                                <!-- Divider -->
+                                <hr class="sidebar-divider d-none d-md-block"><br>
+
+                                <div class="row">
+
+                                    <div class="col">
+                                        <label for="txtestadoUser" class="form-label">Estado Actual</label>
+                                        <input type="text" class="form-control" name="txtestadoUser" id="txtestadoUser" required readonly>
+                                    </div>
+
+                                    <div class="col">
+                                        <label for="txtNuevoMonto" class="form-label">Seleccione...</label>
+                                        <select name="cmbtipoUser" id="cmbtipoUser" class="form-select">
+                                            <option value="ACTIVO">ACTIVO</option>
+                                            <option value="INACTIVO">INACTIVO</option>
+                                        </select>
+                                        <input name="txtcoduser" id="txtcoduser" readonly hidden required />
+                                    </div>
+
+                                    <div class="col">
+                                        <label for="txtNuevoMonto" class="form-label">-</label>
+                                        <button type="submit" class="btn btn-success form-control">Cambiar Estado</button>
+                                    </div>
+
+                                </div>
+                            </form>
+                            <br />
+                            <!-- Divider -->
+                            <hr class="sidebar-divider d-none d-md-block">
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--fin del formulario-->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#listaUser').dataTable({
+            "order": [[0, "desc"]],
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+            }
+
+        });
+    });
+
+</script>
+
+<script type="text/javascript">
+
+    function extraerdatos(estado, user, rol, codigo) {
+        document.getElementById('txtestadoUser').value = estado;
+        document.getElementById('usuariojava').value = user;
+        document.getElementById('txtcoduser').value = codigo;
+        document.getElementById('txtcoduser2').value = codigo;
+        document.getElementById('roljava').value = "(" + rol + ")";
+
+    }
+
+</script>
+
+
+<script>
+    function verficarPassword() {
+
+        // Ontenemos los valores de los campos de contraseñas
+        pass1 = document.getElementById('txtnewpass');
+        pass2 = document.getElementById('txtconfirmpass');
+
+        // Verificamos si las constraseñas no coinciden
+        if (pass1.value != pass2.value) {
+            // Si las constraseñas no coinciden mostramos un mensaje
+            document.getElementById("error").classList.add("mostrar");
+            return false;
+        }
+    }
+</script>
+
+<style>
+    input {
+        width: 180px;
+        padding: 2px;
+    }
+
+    .sinbordefondo {
+        background-color: #ffffff;
+        border: 0;
+    }
+</style>

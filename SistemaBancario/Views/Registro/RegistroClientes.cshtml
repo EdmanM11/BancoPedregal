@@ -1,0 +1,134 @@
+﻿
+@{
+    ViewBag.Title = "RegistroClientes";
+}
+
+
+<!-- Formulario -->
+<div style="padding-top: 0%; padding-left: 1%; padding-bottom: 2%;">
+    <div class="w-100 text-dark rounded" style="background-color: #c9d2d1">
+        <div class="p-4 m-2">
+            <div class="text-center">
+                <h3 class="h4 text-white-900"><b>Ingrese los datos del cliente:</b> </h3>
+            </div>
+            <br>
+
+            @if (TempData["mensaje"] != null)
+            {
+                if (TempData["mensaje"].ToString() == "1")
+                {
+                    <script>
+                       
+                       
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Cliente insertado con exito'
+                        })
+
+                    </script>
+                    <!--<div class="alert alert-success" role="alert">
+                Registro Insertado
+            </div>-->
+
+                }
+                else
+                {
+                    <div class="alert alert-danger" role="alert">
+                        Error
+                    </div>
+                }
+            }
+
+            <form class="row g-3 needs-validation" method="post" action="@Url.Content("../Registro/NuevoCliente")" novalidate>
+
+                <div class="row">
+                    <div class="text-star">
+                        <p class="h5"><b>Datos Generales</b> <i class="fas fa-users"></i></p>
+                    </div>
+                </div>
+                <!-- Divider -->
+                <hr class="sidebar-divider d-none d-md-block"><br>
+
+                <div class="row">
+
+                    <div class="col">
+                        <label for="txtnombres" class="form-label">Nombres:</label>
+                        <input type="text" class="form-control" maxlength="20" id="txtnombres" name="txtnombres" onkeypress="javascript: return sololetras(event)" required>
+                        <div class="valid-feedback">
+                            Valido
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="txtapellidos" class="form-label">Apellidos:</label>
+                        <input type="text" class="form-control" id="txtapellidos" maxlength="20" name="txtapellidos" onkeypress="javascript: return sololetras(event)" required>
+                        <div class="valid-feedback">
+                            Valido
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <label for="txtfecha" class="form-label">Fecha de Nacimiento</label>
+                        <input type="date" class="form-control" id="txtfecha" name="txtfecha"  required>
+                        <div class="valid-feedback">
+                            Valido
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+
+                <div>
+
+                </div>
+                <div class="row">
+
+                    <div class="col">
+                        <label for="txtidentidad" class="form-label">Identidad:</label>
+                        <input type="text" class="form-control" maxlength="13" id="txtidentidad" name="txtidentidad" onkeypress="javascript: return solonumeros(event)" required>
+                        <div class="valid-feedback">
+                            Valido
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="txtdireccion" class="form-label">Dirección:</label>
+                        <input type="text" class="form-control" maxlength="20" id="txtdireccion" name="txtdireccion" required>
+                        <div class="valid-feedback">
+                            Valido
+                        </div>
+                    </div>
+                    <div class="col">
+
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <hr class="sidebar-divider d-none d-md-block">
+                <div class="row">
+                    <div class="col col-6 mx-auto text-center">
+                        <div class="">
+
+                            <button type="submit" class="btn btn-primary">Agregar Cliente</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Scripts/funciones/funciones.js"></script>
+<script src="~/Scripts/funciones/validaciones.js" type="text/javascript"></script>

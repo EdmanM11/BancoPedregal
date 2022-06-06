@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "BusquedaSeleccionada";
+}
+
+@{
+    var validar = 0;
+
+    foreach (var valor in ViewBag.valor)
+    {
+        validar = valor.COD_CUENTA;
+    }
+    if (validar == 0)
+    {
+        <h4 class="text-center font-weight-light my-4" style="font-size:xx-large">Este cliente no posee cuentas bancarias</h4>
+    }
+    else
+    {
+        <h4 class="text-center font-weight-light my-4" style="font-size:xx-large">Cuentas Personales</h4>
+        foreach (var lst in ViewBag.valor2)
+        {
+            <h5 class="text-center">Cuentas bancarias de: @lst.NOMBRE @lst.APELLIDO</h5>
+            <h6 class="text-center">Resumen de cuentas bancarias</h6>
+        }
+    }
+
+}
+
+
+
+<div class="card-body">
+    <table class="table table-striped" id="historialtabla">
+        <thead class="table-success">
+            <tr>
+                <th>Número de Cuenta</th>
+                <th>Nombre</th>
+                <th>Tipo de Cuenta</th>
+                <th>Saldo</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var lista in ViewBag.valor)
+            {
+
+                <tr>
+                    <td>@lista.NUMERO_CTA</td>
+                    <td>@lista.NOMBRE @lista.APELLIDO</td>
+                    <td>@lista.TIPO_CUENTA</td>
+                    <td>@lista.SALDO</td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+</div>
+@{
+    decimal suma = 0;
+    decimal variable = 0;
+
+    foreach (var saldos in ViewBag.valor)
+    {
+        suma = variable + saldos.SALDO;
+        variable = suma;
+    }
+
+}
+
+<div class="col">
+    <h5 id="saldoglobal" class="text-center">Saldo global de las cuentas es: L. @suma </h5>
+</div>
+
+<div class="col align-content-lg-center">
+    <a class="btn btn-primary" onclick="location.href='@Url.Action("BusquedaCuentas", "Home")'">Regresar</a>
+</div>
+
+
+
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#historialtabla').dataTable({
+            "order": [[0, "desc"]],
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+            }
+
+        });
+    });
+
+</script>
+
+

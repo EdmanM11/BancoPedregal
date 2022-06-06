@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewBag.Title = "Transacciones";
+}
+
+<h3 class="text-center font-weight-light my-4" style="font-size:xx-large">Transacciones Disponibles</h3>
+<hr />
+<h3 class="text-center font-weight-light my-4">
+    <button type="button" class="btn btn-success btn-lg btn-block" onclick="location.href='@Url.Action("Depositos", "Transacciones")'">
+        <img src="~/Scripts/img/Deposito.png" height="350" width="300" />
+    </button>
+
+    <button type="button" style="margin-left: 50px" class="btn btn-danger btn-lg btn-block" onclick="location.href='@Url.Action("Retiros", "Transacciones")'"> <img src="~/Scripts/img/retiro.png" height="350" width="300" /></button>
+</h3>
+

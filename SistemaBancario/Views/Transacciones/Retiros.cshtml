@@ -1,0 +1,226 @@
+﻿
+@{
+    ViewBag.Title = "Retiros";
+}
+
+<h3 class="text-center font-weight-light my-4" style="font-size:xx-large">Retiros</h3>
+@if (TempData["retiro"] != null)
+{
+    if (TempData["retiro"].ToString() == "1")
+    {
+        <script>
+
+
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+
+            Toast.fire({
+                icon: 'success',
+                title: 'Retiro realizado con exito'
+            })
+
+        </script> 
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">
+            No se puede retirar mas del monto que posee en su cuenta
+        </div>
+    }
+}
+
+<div class="container mt-3">
+    <h2>Seleccion de Cuenta</h2>
+    <p>Se muestran sus cuentas disponibles para retiro</p>
+    <table class="table" id="tablaretiros">
+        <thead class="table-success">
+            <tr>
+                <th>Número de cuenta</th>
+                <th>Nombre Propietario</th>
+                <th>Tipo de cuenta</th>
+                <th>Saldo de la cuenta</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var lista in Model)
+            {
+                <tr>
+                    <td>@lista.NUMERO_CTA</td>
+                    <td>@lista.NOMBRE @lista.APELLIDO</td>
+                    <td>@lista.TIPO_CUENTA</td>
+                    <td>L. @lista.SALDO</td>
+                    <td><a onclick="extraerSeleccion('@lista.NUMERO_CTA','@lista.NOMBRE', '@lista.APELLIDO','@lista.TIPO_CUENTA', '@lista.SALDO', '@lista.COD_CUENTA' )" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Seleccionar</a></td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Realizar retiro a su cuenta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!--inicio del formulario-->
+                <!-- Formulario -->
+                <div style="padding-top: 0%; padding-left: 1%; padding-bottom: 2%;">
+                    <div class="w-100 text-dark rounded" style="background-color: #c9d2d1">
+                        <div class="p-4 m-2">
+                            <div class="text-center">
+                                <h3 class="h4 text-white-900"><b>Retiro a cuenta bancaria de:</b> </h3>
+                                <p>
+                                    <input type="text" class="sinbordefondo text-center" id="numerolabel" readonly>
+                                </p>
+                                <p>
+                                    <input type="text" class="sinbordefondo text-center" id="nombrelabel" readonly>
+                                </p>
+                                <p>
+                                    <input type="text" class="sinbordefondo text-center" id="tipoctalabel" readonly>
+                                </p>
+                            </div>
+                            <br>
+
+
+                            <form class="row g-3 needs-validation" method="post" action="@Url.Content("../Transacciones/nuevoRetiro")" novalidate>
+
+                                <div class="row">
+                                    <div class="text-star">
+                                        <p class="h5"><b>Retiro a Cuenta</b> <i class="fas fa-money-bill"></i></p>
+                                    </div>
+                                </div>
+                                <!-- Divider -->
+                                <hr class="sidebar-divider d-none d-md-block"><br>
+
+                                <div class="row">
+
+                                    <div class="col">
+                                        <label for="txtSaldoA" class="form-label">Saldo Actual:</label>
+                                        <input type="text" class="form-control" id="txtSaldoA" required readonly>
+                                        <input type="text" class="form-control" name="txtcodcuentaret" id="txtcodcuentaret" required hidden readonly>
+                                    </div>
+                                    <div class="col">
+                                        <label for="txtMonto" class="form-label">Monto a retirar:</label>
+                                        <input type="text" class="form-control" id="txtmontoret" onkeypress="javascript: return solonumeros(event)" onkeyup="calcularresta()" name="txtmontoret" required>
+                                    </div>
+
+                                    <div class="valid-feedback">
+                                        Valido
+                                    </div>
+
+                                    <div class="col">
+                                        <label for="txtNuevoMonto" class="form-label">Nuevo Saldo</label>
+                                        <input type="text" class="form-control" id="txtNuevoMontos" required readonly>
+                                    </div>
+                                </div>
+
+                                <br />
+                                <!-- Divider -->
+                                <hr class="sidebar-divider d-none d-md-block">
+                                <div class="row">
+                                    <div class="col col-6 mx-auto text-center">
+                                        <div class="">
+
+                                            <button type="submit" id="botonretiro" class="btn btn-danger">Realizar Retiro</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--fin del formulario-->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    function extraerSeleccion(cuenta, nombre, apellido, tipocuenta, saldo, codcuenta) {
+        document.getElementById('numerolabel').value = cuenta;
+        document.getElementById('nombrelabel').value = nombre + ' ' + apellido;
+        document.getElementById('tipoctalabel').value = tipocuenta;
+        document.getElementById('txtSaldoA').value = saldo;
+        document.getElementById('txtcodcuentaret').value = codcuenta;
+
+    }
+</script>
+
+<style>
+    input {
+        width: 300px;
+        padding: 2px;
+    }
+
+    .sinbordefondo {
+        background-color: #c9d2d1;
+        border: 0;
+    }
+</style>
+
+<script type="text/javascript">
+    function calcularresta() {
+
+        var saldoact = parseFloat(document.getElementById('txtSaldoA').value);
+        var montodep = parseFloat(document.getElementById('txtmontoret').value);
+
+        if (saldoact < montodep) {
+
+            Swal.fire(
+                'Error!',
+                'El monto de retiro no debe ser mayor al saldo actual',
+                'error'
+            )
+
+            document.getElementById('botonretiro').disabled = true;
+
+        } else if (saldoact > montodep) {
+            document.getElementById('botonretiro').disabled = false;
+        }
+
+     
+        var saldonuevo = saldoact - montodep;
+        document.getElementById('txtNuevoMontos').value = saldonuevo.toFixed(2);
+    }
+</script>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#tablaretiros').dataTable({
+            "order": [[0, "desc"]],
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+            }
+
+        });
+    });
+
+</script>
+
+<script src="~/Scripts/funciones/funciones.js" type="text/javascript"></script>
+<script src="~/Scripts/funciones/validaciones.js" type="text/javascript"></script>

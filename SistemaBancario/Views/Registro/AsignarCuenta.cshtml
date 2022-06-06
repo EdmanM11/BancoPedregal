@@ -1,0 +1,284 @@
+﻿
+@{
+    ViewBag.Title = "AsignarCuenta";
+}
+
+
+
+<!-- Formulario -->
+<div style="padding-top: 0%; padding-left: 1%; padding-bottom: 2%;">
+    <div class="w-100 text-dark rounded" style="background-color: #c9d2d1">
+        <div class="p-4 m-2">
+            <div class="text-center">
+                <h3 class="h4 text-white-900"><b>Registro de nueva cuenta</b> </h3>
+            </div>
+            <br>
+
+            @if (TempData["sweet"] != null)
+            {
+                if (TempData["sweet"].ToString() == "1")
+                {
+                    <script>
+
+
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Cuenta Agregada con exito'
+                        })
+
+                    </script>
+                }
+                else
+                {
+                    <div class="alert alert-danger" role="alert">
+                        Error
+                    </div>
+                }
+            }
+        <form class="row g-3 needs-validation" method="post" action="@Url.Content("../Registro/CuentarelCliente")" novalidate>
+
+            <div class="row">
+                <div class="text-star">
+                    <p class="h5"><b>Datos Generales</b> <i class="fas fa-users"></i></p>
+                </div>
+            </div>
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block"><br>
+
+            <div class="row">
+
+                <div class="col">
+                    <label for="btnCliente" class="form-label">Seleccione cliente:</label>
+                    <button type="button" class="btn btn-primary form-control" data-bs-toggle="modal" data-bs-target="#ModalClientes">
+                        Seleccionar
+                    </button>
+                </div>
+
+
+
+                <div class="col">
+                    <input type="text" name="txtcod_cliente" id="txtcod_cliente" required hidden>
+                    <label for="txtnombres" class="form-label">Nombres:</label>
+                    <input type="text" class="form-control" id="txtnombres" name="txtnombres" required readonly>
+                    <div class="valid-feedback">
+                        Valido
+                    </div>
+                </div>
+                <div class="col">
+                    <label for="txtapellidos" class="form-label">Apellidos:</label>
+                    <input type="text" class="form-control" id="txtapellidos" name="txtapellidos" required readonly>
+                    <div class="valid-feedback">
+                        Valido
+                    </div>
+                </div>
+
+                <div class="col">
+                    <label for="txtidentidad" class="form-label">Identidad:</label>
+                    <input type="text" class="form-control" id="txtidentidad" name="txtidentidad" required readonly>
+                    <div class="valid-feedback">
+                        Valido
+                    </div>
+                </div>
+            </div>
+            <div></div>
+            <div></div>
+            <div class="row">
+
+                <div class="col">
+                    <label for="btnCuenta" class="form-label">Seleccione Tipo de cuenta:</label>
+                    <button type="button" class="btn btn-primary form-control" data-bs-toggle="modal" data-bs-target="#ModalCuentas">
+                        Seleccionar
+                    </button>
+                </div>
+
+
+                <div class="col">
+                    <input type="text" id="txtcodigo_cuenta" name="txtcodigo_cuenta" required hidden />
+                    <div class="col">
+                        <label for="txtcuenta" class="form-label">Cuenta Seleccionada:</label>
+                        <input type="text" class="form-control" name="txtcuentaselect" id="txtcuentaselect" required readonly>
+                        <div class="valid-feedback">
+                            Valido
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+
+                </div>
+
+                <div class="col">
+
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+            <div class="row">
+                <div class="col col-6 mx-auto text-center">
+                    <div class="">
+
+                        <button type="submit" class="btn btn-primary">Crear Cuenta</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal Clientes -->
+<div class="modal fade" id="ModalClientes" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Selección de Cliente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped" id="tablaClientes">
+                    <thead class="table-success">
+                        <tr>
+                            <th>Identidad</th>
+                            <th>Nombre</th>
+                            <th>Dirección</th>
+                            <th>Estado</th>
+                            <th><center>Acciones</center></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var lista1 in ViewBag.valor)
+                        {
+                            <tr>
+
+
+                                <td>@lista1.NUM_IDENTIDAD</td>
+                                <td>@lista1.NOMBRE @lista1.APELLIDO</td>
+                                <td>@lista1.DIRECCION</td>
+                                <td>@lista1.ESTADO</td>
+                                <td>                                   
+                                        <button onclick="extraerCliente('@lista1.COD_CLIENTE','@lista1.NUM_IDENTIDAD','@lista1.NOMBRE','@lista1.APELLIDO');" type="button" class="btn btn-primary text-center" data-bs-dismiss="modal">
+                                            Seleccionar
+                                        </button>                                  
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Cuentas -->
+<div class="modal fade" id="ModalCuentas" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Selección de Cuenta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped" id="tablaCuentas">
+                    <thead class="table-success">
+                        <tr>
+                            
+                            <th>Tipo de Cuenta</th>
+                            <th>Estado</th>
+
+                            <th><center>Acciones</center></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var lista2 in ViewBag.valor2)
+                        {
+                        <tr>
+                           
+                            <td>@lista2.TIPO_CUENTA</td>
+                            <td>@lista2.ESTADO_CUENTA</td>
+                            <td>
+                                <center>
+                                    <button onclick="extraerCuenta('@lista2.TIPO_CUENTA','@lista2.COD_TIP_CUENTA');" type="button" class="btn btn-primary" name="btntipoCuenta" id="btntipoCuenta" data-bs-dismiss="modal">
+                                        Seleccionar
+                                    </button>
+                                </center>
+                            </td>
+                        </tr>
+                        }
+                        </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#tablaClientes').dataTable({
+            "order": [[0, "desc"]],
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+            }
+
+        });
+    });
+
+</script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#tablaCuentas').dataTable({
+            "order": [[0, "desc"]],
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+            }
+
+        });
+    });
+
+</script>
+
+
+<script type="text/javascript">
+
+    function extraerCliente(codigocliente, identidad, nombre, apellido) {
+        document.getElementById('txtnombres').value = nombre;
+        document.getElementById('txtapellidos').value = apellido;
+        document.getElementById('txtidentidad').value = identidad;
+        document.getElementById('txtcod_cliente').value = codigocliente;
+    }
+
+    function extraerCuenta(cuenta, codigoCuenta) {
+        document.getElementById('txtcuentaselect').value = cuenta;
+        document.getElementById('txtcodigo_cuenta').value = codigoCuenta;
+    }
+
+
+</script>
+
+<script src="~/Scripts/funciones/funciones.js"></script>
+

@@ -1,0 +1,213 @@
+﻿
+@{
+    Layout = null;
+    ViewBag.Title = "Login";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Iniciar Sesion Banpais</title>
+    <link href="css/styles.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+    <link rel="icon" href="~/Scripts/img/favicon.ico" sizes="32x32">
+    <link href="~/Scripts/css/styles.css" rel="stylesheet" />
+
+
+    <!--Version 2 de sweet alert-->
+    <link href="~/Scripts/css/sweetalert2.css" rel="stylesheet" />
+    <script src="~/Scripts/js/sweetalert2.min.js" type="text/javascript"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+
+
+
+    <!--Datatables-->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap5.min.js"></script>
+
+    <script src="~/Scripts/libs/Chart.min.js"></script>
+</head>
+<body class="bg-primary">
+
+
+    @if (TempData["cerrado"] != null)
+    {
+        if (TempData["cerrado"].ToString() == "1")
+        {
+            <script>
+
+
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                })
+
+                Toast.fire({
+                    icon: 'info',
+                    title: 'Sesión cerrada'
+                })
+
+            </script>
+
+
+        }
+    }
+
+    @if (TempData["inicio"] != null)
+    {
+        if (TempData["inicio"].ToString() == "1")
+        {
+            <script>
+                Swal.fire(
+                    'Usuario Inactivo',
+                    'Este usuario no puede acceder al sistema',
+                    'warning'
+                )
+            </script>
+
+        }
+
+    }
+
+    @if (TempData["sesionin"] != null)
+    {
+        if (TempData["sesionin"].ToString() == "1")
+        {
+            <script>
+                Swal.fire(
+                    'Sesión Inactiva',
+                    'La sesión fue cerrada por tiempo limite de sesión',
+                    'info'
+                )
+            </script>
+
+        }
+    }
+
+    @if (TempData["sesionin"] != null)
+    {
+        if (TempData["sesionin"].ToString() == "400")
+        {
+            <script>
+                Swal.fire(
+                    'Error',
+                    'No se pude acceder sin permisos',
+                    'error'
+                )
+            </script>
+
+        }
+    }
+
+    @if (TempData["inicio"] != null)
+    {
+        if (TempData["inicio"].ToString() == "200")
+        {
+            <script>
+                Swal.fire(
+                    'Credenciales Incorrectas',
+                    'Revise usuario o contraseña',
+                    'error'
+                )
+            </script>
+
+        }
+    }
+
+    @if (TempData["inicio"] != null)
+    {
+        if (TempData["inicio"].ToString() == "50")
+        {
+            <script>
+                Swal.fire(
+                    'Usuario no encontrado',
+                    'El usuario no existe en el sistema',
+                    'info'
+                )
+            </script>
+
+        }
+    }
+
+    <div id="layoutAuthentication">
+        <div id="layoutAuthentication_content">
+            <main>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-5">
+                            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                <div class="card-header"><h3 class="text-center font-weight-light my-4">Iniciar Sesión</h3></div>
+                                <div class="card-body">
+                                    <form name="frmLogin" id="frmLogin" method="post" action="@Url.Action("../Login/Autenticar")">
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="txtusuario" name="txtusuario" type="text" placeholder="name@example.com" required />
+                                            <label for="inputEmail">Usuario</label>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="txtpassword" name="txtpassword" type="password" placeholder="Password" required />
+                                            <label for="inputPassword">Contraseña</label>
+                                        </div>
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="" />
+                                            <label class="form-check-label" for="inputRememberPassword">Recordar contraseña</label>
+                                        </div>
+                                        <div class="card-footer text-center py-3">
+                                        </div>
+                                        <div class=" text-center">
+                                            <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="card-footer text-center py-3">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <div id="layoutAuthentication_footer">
+            <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid px-4">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-muted">Copyright &copy; Banco del Pais 2022</div>
+                        <div>
+                            <a href="#">Política de Privacidad</a>
+                            &middot;
+                            <a href="#">Terminos &amp; Condiciones</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+    <script src="~/Scripts/js/scripts.js"></script>
+
+    <!--<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/Scripts/sweetalert.min.js"></script>-->
+
+    <link rel="stylesheet" hhref="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+
+</body>
+</html>
+
